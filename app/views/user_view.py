@@ -175,24 +175,22 @@ class UserView(View):
 
             try:
                 wb = load_workbook(file_path)
-                sheet = wb.active  # Get the active sheet (or use wb[sheet_name] for specific sheets)
+                sheet = wb.active  
                 sheet_data = []
 
                 for row in sheet.iter_rows(min_row=2, values_only=True):  
                     sheet_data.append(row)
 
-                # Log the extracted data
                 print(f"Data extracted from file: {sheet_data}")
             
             except Exception as e:
                 print(f"Error while extracting data from Excel file: {e}")
                 print("Detailed Stack Trace:")
-                print(traceback.format_exc())  # Print the detailed stack trace here
+                print(traceback.format_exc())  
                 return send_json_response(http_status=HttpStatusCode.OK.value, response_status=False,
                                         message_key="Error extracting data",
                                         data=None, error=str(e))
 
-            # Check if sheet data exists
             if not sheet_data:
                 print("No data found in 'Sheet1'.")
                 return send_json_response(http_status=HttpStatusCode.OK.value, response_status=False,
@@ -230,6 +228,5 @@ class UserView(View):
               return send_json_response(http_status=HttpStatusCode.OK.value, response_status=False,
                                       message_key= " Error Comes while processing exel file",
                                    data=None, error=None)
-            
  
 
