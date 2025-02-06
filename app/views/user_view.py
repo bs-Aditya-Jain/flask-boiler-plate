@@ -229,4 +229,3 @@ class UserView(View):
                                       message_key= " Error Comes while processing exel file",
                                    data=None, error=None)
  
-
