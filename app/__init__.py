@@ -22,6 +22,8 @@ import redis
 from rq import Queue
 from rq_scheduler import Scheduler
 import yaml
+import datetime
+from datetime import timedelta
 
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(base_dir)
@@ -184,7 +186,12 @@ def clear_scheduler():
     scheduler = Scheduler(connection=r)
     for job in scheduler.get_jobs():
         scheduler.cancel(job)
-
+        scheduler.schedule(
+        scheduled_time=datetime.utcnow() + timedelta(seconds=2), 
+        func=clear_scheduler,  
+        interval=2,  
+        repeat=None 
+        )
 
 app = Flask(__name__)
 app_set_configurations(application=app, config_data=config_data)
