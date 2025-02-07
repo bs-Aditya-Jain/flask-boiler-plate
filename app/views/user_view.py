@@ -21,7 +21,6 @@ import jwt
 from werkzeug.security import check_password_hash
 from openpyxl import load_workbook
 import os 
-import traceback
 
 class UserView(View):
     """Contains all user related functions"""
@@ -171,7 +170,6 @@ class UserView(View):
 
             file_path = os.path.join(config_data['UPLOAD_FOLDER'],f)
             file.save(file_path)
-            print("save file", file_path)
 
             try:
                 wb = load_workbook(file_path)
@@ -181,18 +179,13 @@ class UserView(View):
                 for row in sheet.iter_rows(min_row=2, values_only=True):  
                     sheet_data.append(row)
 
-                print(f"Data extracted from file: {sheet_data}")
             
             except Exception as e:
-                print(f"Error while extracting data from Excel file: {e}")
-                print("Detailed Stack Trace:")
-                print(traceback.format_exc())  
                 return send_json_response(http_status=HttpStatusCode.OK.value, response_status=False,
                                         message_key="Error extracting data",
                                         data=None, error=str(e))
 
             if not sheet_data:
-                print("No data found in 'Sheet1'.")
                 return send_json_response(http_status=HttpStatusCode.OK.value, response_status=False,
                                         message_key="No data found in Sheet1",
                                         data=None, error="Sheet1 is missing or empty.")
@@ -222,9 +215,6 @@ class UserView(View):
                                       data=None, error=None)
         
         except Exception as e:
-              print(f"Error: {e}")
-              print("Detailed Stack Trace:")
-              print(traceback.format_exc()) 
               return send_json_response(http_status=HttpStatusCode.OK.value, response_status=False,
                                       message_key= " Error Comes while processing exel file",
                                    data=None, error=None)
